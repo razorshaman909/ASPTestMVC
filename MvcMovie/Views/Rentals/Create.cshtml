@@ -1,0 +1,47 @@
+﻿@model MvcMovie.Models.Rental
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Rental</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserID" class="control-label"></label>
+                <select asp-for="UserID" class ="form-control" asp-items="ViewBag.UserID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieId" class="control-label"></label>
+                <select asp-for="MovieId" class ="form-control" asp-items="ViewBag.MovieID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RentStart" class="control-label"></label>
+                <input asp-for="RentStart" class="form-control" />
+                <span asp-validation-for="RentStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RentEnd" class="control-label"></label>
+                <input asp-for="RentEnd" class="form-control" />
+                <span asp-validation-for="RentEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
