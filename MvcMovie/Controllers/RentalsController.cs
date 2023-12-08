@@ -49,7 +49,7 @@ namespace MvcMovie.Controllers
         // GET: Rentals/Create
         public IActionResult Create()
         {
-            ViewData["MovieID"] = new SelectList(_context.Movies, "Id", "Id");
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id");
             ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID");
             return View();
         }
@@ -59,7 +59,7 @@ namespace MvcMovie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RentalID,UserID,MovieID,RentStart,RentEnd")] Rental rental)
+        public async Task<IActionResult> Create([Bind("RentalID,UserID,MovieId,RentStart,RentEnd")] Rental rental)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace MvcMovie.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MovieID"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);
             ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", rental.UserID);
             return View(rental);
         }
@@ -85,7 +85,7 @@ namespace MvcMovie.Controllers
             {
                 return NotFound();
             }
-            ViewData["MovieID"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);
             ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", rental.UserID);
             return View(rental);
         }
@@ -95,7 +95,7 @@ namespace MvcMovie.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RentalID,UserID,MovieID,RentStart,RentEnd")] Rental rental)
+        public async Task<IActionResult> Edit(int id, [Bind("RentalID,UserID,MovieId,RentStart,RentEnd")] Rental rental)
         {
             if (id != rental.RentalID)
             {
@@ -122,7 +122,7 @@ namespace MvcMovie.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MovieID"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);
             ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", rental.UserID);
             return View(rental);
         }
