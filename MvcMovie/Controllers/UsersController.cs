@@ -28,6 +28,7 @@ namespace MvcMovie.Controllers
             foreach (var user in users)
             {
                 user.RentalStatus = GetRentalStatus(user.Rentals);
+                /*System.Diagnostics.Debug.WriteLine(users);*/
             }
 
             return View(users);

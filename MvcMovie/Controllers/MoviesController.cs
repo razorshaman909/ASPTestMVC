@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
 using MvcMovie.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MvcMovie.Controllers
 {
@@ -30,7 +31,7 @@ namespace MvcMovie.Controllers
             // Use LINQ to get list of genres.
             IQueryable<string> genreQuery = from m in _context.Movies
                                             orderby m.Genre
-                                            select m.Genre;
+            select m.Genre;
             var movies = from m in _context.Movies
                          select m;
 

@@ -20,10 +20,16 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Rentals
-        public async Task<IActionResult> Index()
+        /*public async Task<IActionResult> Index()
         {
             var mvcMovieContext = _context.Rentals.Include(r => r.Movie).Include(r => r.User);
             return View(await mvcMovieContext.ToListAsync());
+        }*/
+
+        public async Task<List<Rental>> Index()
+        {
+            var mvcMovie = await _context.Database.SqlQueryRaw<Rental>("SELECT (*) FROM ((dbo.[Rentals] AS [r] INNER JOIN dbo.[User] AS [u] ON [r].UserID = [u].UserID) INNER JOIN dbo.[Movie] AS [m] ON [r].MovieId = [m].Id)").ToListAsync();
+            return mvcMovie;
         }
 
         // GET: Rentals/Details/5
