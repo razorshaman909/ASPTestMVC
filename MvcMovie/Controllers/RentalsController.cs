@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,29 +8,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
 using MvcMovie.Models;
+using MvcMovie.Services;
 
 namespace MvcMovie.Controllers
 {
     public class RentalsController : Controller
     {
         private readonly MvcMovieContext _context;
+        private readonly RentalService _rentalService;
 
-        public RentalsController(MvcMovieContext context)
+        public RentalsController(
+            MvcMovieContext context,
+            RentalService rentalService
+        )
         {
             _context = context;
+            _rentalService = rentalService;
         }
 
-        // GET: Rentals
-        /*public async Task<IActionResult> Index()
-        {
-            var mvcMovieContext = _context.Rentals.Include(r => r.Movie).Include(r => r.User);
-            return View(await mvcMovieContext.ToListAsync());
-        }*/
+        //// GET: Rentals
+        ///*public async Task<IActionResult> Index()
+        //{
+        //    var mvcMovieContext = _context.Rentals.Include(r => r.Movie).Include(r => r.User);
+        //    return View(await mvcMovieContext.ToListAsync());
+        //}*/
 
-        public async Task<List<Rental>> Index()
+        public async Task<IActionResult> Index()
         {
-            var mvcMovie = await _context.Database.SqlQueryRaw<Rental>("SELECT (*) FROM ((dbo.[Rentals] AS [r] INNER JOIN dbo.[User] AS [u] ON [r].UserID = [u].UserID) INNER JOIN dbo.[Movie] AS [m] ON [r].MovieId = [m].Id)").ToListAsync();
-            return mvcMovie;
+            IEnumerable<Rental> rentals = await _rentalService.GetRentals();
+            return View(rentals);
         }
 
         // GET: Rentals/Details/5
