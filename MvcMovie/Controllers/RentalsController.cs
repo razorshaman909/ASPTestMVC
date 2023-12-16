@@ -40,8 +40,7 @@ namespace MvcMovie.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<Rental> rentals = await _rentalService.GetRentals();
-            IEnumerable<Rental> rentalsFromEF = await _rentalEFService.GetRentals();
-            return View(rentalsFromEF);
+            return View(rentals);
         }
 
         // GET: Rentals/Details/5
@@ -81,8 +80,9 @@ namespace MvcMovie.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(rental);
-                await _context.SaveChangesAsync();
+                //_context.Add(rental);
+                //await _context.SaveChangesAsync();
+                await _rentalService.AddRental(rental);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);

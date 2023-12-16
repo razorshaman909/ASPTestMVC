@@ -54,5 +54,35 @@ namespace MvcMovie.Services
                 }
             );
         }
+
+        public async Task<int> AddRental(Rental rental)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO dbo.[Rentals]");
+            sb.AppendLine("(");
+            sb.AppendLine("UserID,");
+            sb.AppendLine("MovieId,");
+            sb.AppendLine("RentStart,");
+            sb.AppendLine("RentEnd");
+            sb.AppendLine(")");
+            sb.AppendLine("VALUES");
+            sb.AppendLine("(");
+            sb.AppendLine("@UserID,");
+            sb.AppendLine("@MovieId,");
+            sb.AppendLine("@RentStart,");
+            sb.AppendLine("@RentEnd");
+            sb.AppendLine(")");
+            sb.AppendLine("SELECT SCOPE_IDENTITY();");
+
+            string query = sb.ToString();
+
+            return await _connection.ExecuteAsync(query, new
+            {
+                UserID = rental.UserID,
+                MovieId = rental.MovieId,
+                RentStart = rental.RentStart,
+                RentEnd = rental.RentEnd,
+            });
+        }
     }
 }
