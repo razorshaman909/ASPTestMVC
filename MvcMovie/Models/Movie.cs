@@ -31,3 +31,13 @@ public class Movie
     public string? Rating { get; set; }
     public ICollection<Rental>? Rentals { get; set; }
 }
+
+public interface IMovieDB
+{
+    public int mId { get; set; }
+    public string? mTitle { get; set; }
+    public DateTime mReleaseDate { get; set; }
+    public string? mGenre { get; set; }
+    public decimal mPrice { get; set; }
+    public string? mRating { get; set; }
+}

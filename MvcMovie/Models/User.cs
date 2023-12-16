@@ -10,4 +10,13 @@
         public ICollection<Rental>? Rentals { get; set; }
 
     }
+
+    public interface IUserDB
+    {
+        public int uUserID { get; set; }
+        public string? uLastName { get; set; }
+        public string? uFirstMidName { get; set; }
+        public DateTime uJoinDate { get; set; }
+        public string? uRentalStatus { get; set; }
+    }
 }

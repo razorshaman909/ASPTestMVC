@@ -24,10 +24,8 @@ namespace MvcMovie.Services
             sb.AppendLine(",[r].MovieId");
             sb.AppendLine(",[r].RentStart");
             sb.AppendLine(",[r].RentEnd");
-            //splitting point for dapper
-            sb.AppendLine(",[u].UserID AS SplittingPoint");
             //user
-            sb.AppendLine(",[u].UserID");
+            sb.AppendLine(",[u].UserID As Id"); // put "Id" as alias for dapper to know this is the splitting point
             sb.AppendLine(",[u].LastName");
             sb.AppendLine(",[u].FirstMidName");
             sb.AppendLine(",[u].JoinDate");
@@ -53,8 +51,7 @@ namespace MvcMovie.Services
                     rental.Movie = movie;
 
                     return rental;
-                },
-                splitOn: "SplittingPoint"
+                }
             );
         }
     }

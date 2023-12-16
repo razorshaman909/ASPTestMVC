@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
 using MvcMovie.Models;
 using MvcMovie.Services;
+using MvcMovie.Services.EF;
 
 namespace MvcMovie.Controllers
 {
@@ -16,14 +17,17 @@ namespace MvcMovie.Controllers
     {
         private readonly MvcMovieContext _context;
         private readonly RentalService _rentalService;
+        private readonly RentalEFService _rentalEFService;
 
         public RentalsController(
             MvcMovieContext context,
-            RentalService rentalService
+            RentalService rentalService,
+            RentalEFService rentalEFService
         )
         {
             _context = context;
             _rentalService = rentalService;
+            _rentalEFService = rentalEFService;
         }
 
         //// GET: Rentals
@@ -36,7 +40,8 @@ namespace MvcMovie.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<Rental> rentals = await _rentalService.GetRentals();
-            return View(rentals);
+            IEnumerable<Rental> rentalsFromEF = await _rentalEFService.GetRentals();
+            return View(rentalsFromEF);
         }
 
         // GET: Rentals/Details/5
