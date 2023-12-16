@@ -39,9 +39,11 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Movie.Title)
+                @* @Html.DisplayFor(modelItem => item.Title) *@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.User.UserID)
+                @* @Html.DisplayFor(modelItem => item.UserID) *@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.RentalID">Edit</a> |
