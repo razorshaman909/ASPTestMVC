@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,30 +8,48 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
 using MvcMovie.Models;
+using MvcMovie.Services;
+using MvcMovie.Services.EF;
 
 namespace MvcMovie.Controllers
 {
     public class RentalsController : Controller
     {
         private readonly MvcMovieContext _context;
+        private readonly RentalService _rentalService;
+        private readonly RentalEFService _rentalEFService;
 
-        public RentalsController(MvcMovieContext context)
+        public RentalsController(
+            MvcMovieContext context,
+            RentalService rentalService,
+            RentalEFService rentalEFService
+        )
         {
             _context = context;
+            _rentalService = rentalService;
+            _rentalEFService = rentalEFService;
         }
 
-        // GET: Rentals
+
+        //// GET: Rentals
+        ///*public async Task<IActionResult> Index()
+        //{
+        //    var mvcMovieContext = _context.Rentals.Include(r => r.Movie).Include(r => r.User);
+        //    return View(await mvcMovieContext.ToListAsync());
+        //}*/
+
         public async Task<IActionResult> Index()
         {
-            var mvcMovieContext = _context.Rentals.Include(r => r.Movie).Include(r => r.User);
-            return View(await mvcMovieContext.ToListAsync());
+            IEnumerable<Rental> rentals = await _rentalService.GetRentals();
+            return View(rentals);
         }
-
+        
         /*public async Task<IActionResult> Index()
         {
             var mvcMovie = await _context.Rentals.FromSql($"SELECT [r].[RentalID], [r].[MovieId], [r].[RentEnd], [r].[RentStart], [r].[UserID], [m].[Title]\r\nFROM [Rentals] AS [r]\r\nINNER JOIN [Movie] AS [m] ON [r].[MovieId] = [m].[Id]\r\nINNER JOIN [User] AS [u] ON [r].[UserID] = [u].[UserID]").ToListAsync();
             return View(mvcMovie);
         }*/
+
 
         // GET: Rentals/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -94,8 +113,9 @@ namespace MvcMovie.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(rental);
-                await _context.SaveChangesAsync();
+                //_context.Add(rental);
+                //await _context.SaveChangesAsync();
+                await _rentalService.AddRental(rental);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);
