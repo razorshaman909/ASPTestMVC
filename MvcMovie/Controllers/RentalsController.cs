@@ -30,6 +30,7 @@ namespace MvcMovie.Controllers
             _rentalEFService = rentalEFService;
         }
 
+
         //// GET: Rentals
         ///*public async Task<IActionResult> Index()
         //{
@@ -42,6 +43,13 @@ namespace MvcMovie.Controllers
             IEnumerable<Rental> rentals = await _rentalService.GetRentals();
             return View(rentals);
         }
+        
+        /*public async Task<IActionResult> Index()
+        {
+            var mvcMovie = await _context.Rentals.FromSql($"SELECT [r].[RentalID], [r].[MovieId], [r].[RentEnd], [r].[RentStart], [r].[UserID], [m].[Title]\r\nFROM [Rentals] AS [r]\r\nINNER JOIN [Movie] AS [m] ON [r].[MovieId] = [m].[Id]\r\nINNER JOIN [User] AS [u] ON [r].[UserID] = [u].[UserID]").ToListAsync();
+            return View(mvcMovie);
+        }*/
+
 
         // GET: Rentals/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -63,6 +71,23 @@ namespace MvcMovie.Controllers
             return View(rental);
         }
 
+        /*public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var p1 = new SqlParameter("@Id", id);
+            var rental = await _context.Rentals.FromSqlInterpolated($"SELECT TOP(1) [r].[RentalID], [r].[MovieId], [r].[RentEnd], [r].[RentStart], [r].[UserID], [m].[Title]\r\nFROM [Rentals] AS [r]\r\nINNER JOIN [Movie] AS [m] ON [r].[MovieId] = [m].[Id]\r\nINNER JOIN [User] AS [u] ON [r].[UserID] = [u].[UserID]\r\nWHERE [r].[RentalID] = {id}").FirstOrDefaultAsync();
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            return View(rental);
+        }*/
+
+
         // GET: Rentals/Create
         public IActionResult Create()
         {
@@ -70,6 +95,14 @@ namespace MvcMovie.Controllers
             ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID");
             return View();
         }
+
+        /*public IActionResult Create()
+        {
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id");
+            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID");
+            return View();
+        }*/
+
 
         // POST: Rentals/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -89,6 +122,15 @@ namespace MvcMovie.Controllers
             ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", rental.UserID);
             return View(rental);
         }
+
+        /*public async Task<IActionResult> Create([Bind("RentalID,UserID,MovieId,RentStart,RentEnd")] Rental rental)
+        {
+            var insert
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Id", rental.MovieId);
+            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", rental.UserID);
+            return View(rental);
+        }*/
+
 
         // GET: Rentals/Edit/5
         public async Task<IActionResult> Edit(int? id)
