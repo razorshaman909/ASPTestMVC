@@ -31,19 +31,22 @@ namespace MvcMovie.Controllers
         }
 
 
-        //// GET: Rentals
-        ///*public async Task<IActionResult> Index()
-        //{
-        //    var mvcMovieContext = _context.Rentals.Include(r => r.Movie).Include(r => r.User);
-        //    return View(await mvcMovieContext.ToListAsync());
-        //}*/
+        // GET: Rentals
+        // Original dbcontext method
+        /*public async Task<IActionResult> Index()
+        {
+            var mvcMovieContext = _context.Rentals.Include(r => r.Movie).Include(r => r.User);
+            return View(await mvcMovieContext.ToListAsync());
+        }*/
 
+        // Custom Rental service method
         public async Task<IActionResult> Index()
         {
             IEnumerable<Rental> rentals = await _rentalService.GetRentals();
             return View(rentals);
         }
-        
+
+        // raw sql method using FromSql of dbset
         /*public async Task<IActionResult> Index()
         {
             var mvcMovie = await _context.Rentals.FromSql($"SELECT [r].[RentalID], [r].[MovieId], [r].[RentEnd], [r].[RentStart], [r].[UserID], [m].[Title]\r\nFROM [Rentals] AS [r]\r\nINNER JOIN [Movie] AS [m] ON [r].[MovieId] = [m].[Id]\r\nINNER JOIN [User] AS [u] ON [r].[UserID] = [u].[UserID]").ToListAsync();
@@ -52,7 +55,8 @@ namespace MvcMovie.Controllers
 
 
         // GET: Rentals/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // Original dbcontext method
+        /*public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -69,6 +73,23 @@ namespace MvcMovie.Controllers
             }
 
             return View(rental);
+        }*/
+
+        // Custom Rental service method
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<Rental> rentals = await _rentalService.GetRentals(id);
+            if (rentals == null)
+            {
+                return NotFound();
+            }
+
+            return View(rentals);
         }
 
         /*public async Task<IActionResult> Details(int? id)

@@ -1,4 +1,5 @@
-﻿@model MvcMovie.Models.Rental
+﻿@*
+@model MvcMovie.Models.Rental
 
 @{
     ViewData["Title"] = "Details";
@@ -28,18 +29,67 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Movie.Title)
-            @* @Html.DisplayFor(model => model.Title) *@
+            @* @Html.DisplayFor(model => model.Title) *@@*
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.User)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.User.UserID)
-            @* @Html.DisplayFor(model => model.UserID) *@
+            @* @Html.DisplayFor(model => model.UserID) *@@*
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.RentalID">Edit</a> |
     <a asp-action="Index">Back to List</a>
+</div> 
+*@
+@model IEnumerable<MvcMovie.Models.Rental>
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+@foreach (var item in Model) {
+<div>
+    <h4>Rental</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RentStart)
+        </dt>
+        <dd class="col-sm-10">
+                @Html.DisplayFor(modelItem => item.RentStart)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RentEnd)
+        </dt>
+        <dd class="col-sm-10">
+                @Html.DisplayFor(modelItem => item.RentEnd)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie)
+        </dt>
+        <dd class="col-sm-10">
+                @Html.DisplayFor(modelItem => item.Movie.Title)
+            @* @Html.DisplayFor(model => model.Title) *@
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class="col-sm-10">
+                @Html.DisplayFor(modelItem => item.UserID)
+            @* @Html.DisplayFor(model => model.UserID) *@
+        </dd>
+    </dl>
 </div>
+<div>
+        <a asp-action="Edit" asp-route-id="@item.RentalID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+}
