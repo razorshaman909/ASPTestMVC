@@ -219,16 +219,17 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var rental = await _context.Rentals
+            /*var rental = await _context.Rentals
                 .Include(r => r.Movie)
                 .Include(r => r.User)
-                .FirstOrDefaultAsync(m => m.RentalID == id);
-            if (rental == null)
+                .FirstOrDefaultAsync(m => m.RentalID == id);*/
+            IEnumerable<Rental> rentals = await _rentalService.GetRentals(id);
+            if (rentals == null)
             {
                 return NotFound();
             }
 
-            return View(rental);
+            return View(rentals);
         }
 
         // POST: Rentals/Delete/5
