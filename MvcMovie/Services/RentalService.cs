@@ -152,5 +152,20 @@ namespace MvcMovie.Services
                 Rentid = id
             });
         }
+
+        public async Task<int> DeleteRental(int? id)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("DELETE FROM dbo.[Rentals]");
+            sb.AppendLine("WHERE");
+            sb.AppendLine("RentalId=@RentId");
+
+            string query = sb.ToString();
+
+            return await _connection.ExecuteAsync(query, new
+            {
+                Rentid = id
+            });
+        }
     }
 }

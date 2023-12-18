@@ -237,13 +237,14 @@ namespace MvcMovie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var rental = await _context.Rentals.FindAsync(id);
+            /*var rental = await _context.Rentals.FindAsync(id);
             if (rental != null)
             {
                 _context.Rentals.Remove(rental);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();*/
+            await _rentalService.DeleteRental(id);
             return RedirectToAction(nameof(Index));
         }
 
