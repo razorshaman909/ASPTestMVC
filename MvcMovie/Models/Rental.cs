@@ -17,13 +17,4 @@ namespace MvcMovie.Models
         /*public string? Title { get; set; }*/
     }
 
-    public interface IRentalDB
-    {
-        public int rRentalID { get; set; }
-        public int rUserID { get; set; }
-
-        public int rMovieId { get; set; }
-        public DateTime rRentStart { get; set; }
-        public DateTime rRentEnd { get; set; }
-    }
 }

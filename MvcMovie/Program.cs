@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MvcMovie.Data;
 using MvcMovie.Models;
 using MvcMovie.Services;
-using MvcMovie.Services.EF;
 using System.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MvcMovieContext>(options =>
@@ -26,7 +25,6 @@ builder.Services.AddTransient<IDbConnection>(c => new SqlConnection(builder.Conf
 
 //add custom services
 builder.Services.AddScoped<RentalService>();
-builder.Services.AddScoped<RentalEFService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
