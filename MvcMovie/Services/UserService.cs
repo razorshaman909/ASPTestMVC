@@ -18,31 +18,44 @@ namespace MvcMovie.Services
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("SELECT");
-            sb.AppendLine("[r].RentalID");
-            sb.AppendLine(",[r].UserID");
-            sb.AppendLine(",[r].MovieId");
-            sb.AppendLine(",[r].RentStart");
-            sb.AppendLine(",[r].RentEnd");
-            //rentals
-            sb.AppendLine(",[u].UserID As Id"); // put "Id" as alias for dapper to know this is the splitting point
+            sb.AppendLine("[u].UserID");
             sb.AppendLine(",[u].LastName");
             sb.AppendLine(",[u].FirstMidName");
             sb.AppendLine(",[u].JoinDate");
             sb.AppendLine(",[u].RentalStatus");
-            sb.AppendLine("FROM dbo.[Rentals] AS [r]");
-            sb.AppendLine("INNER JOIN dbo.[User] AS [u] ON [r].UserID = [u].UserID");
+            //rentals
+            sb.AppendLine(",[r].RentalID As Id");
+            sb.AppendLine(",[r].UserID");
+            sb.AppendLine(",[r].MovieId");
+            sb.AppendLine(",[r].RentStart");
+            sb.AppendLine(",[r].RentEnd");
+            sb.AppendLine("FROM dbo.[User] AS [u]");
+            sb.AppendLine("LEFT JOIN dbo.[Rentals] AS [r] ON [u].UserID = [r].UserID");
 
             string query = sb.ToString();
 
-            return await _connection.QueryAsync<Rental, User, User>(
+            var userMap = new Dictionary<int, User>();
+            await _connection.QueryAsync<User, Rental, User>(
                 query,
-                (rental, user) =>
+                (user, rental) =>
                 {
-                    rental.User = user;
+                    rental.UserID = user.UserID;
 
+                    if (userMap.TryGetValue(user.UserID, out User existingUser))
+                    {
+                        user = existingUser;
+                    }
+                    else
+                    {
+                        user.Rentals = new List<Rental>();
+                        userMap.Add(user.UserID, user);
+                    }
+
+                    user.Rentals.Add(rental);
                     return user;
                 }
             );
+            return userMap.Values.ToList();
         }
     }
 }
