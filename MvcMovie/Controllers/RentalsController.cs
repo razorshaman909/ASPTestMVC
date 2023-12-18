@@ -36,6 +36,8 @@ namespace MvcMovie.Controllers
         /*public async Task<IActionResult> Index()
         {
             var mvcMovieContext = _context.Rentals.Include(r => r.Movie).Include(r => r.User);
+            string sql = mvcMovieContext.ToString();
+            Console.WriteLine(sql);
             return View(await mvcMovieContext.ToListAsync());
         }*/
 
@@ -187,8 +189,9 @@ namespace MvcMovie.Controllers
             {
                 try
                 {
-                    _context.Update(rental);
-                    await _context.SaveChangesAsync();
+                    /*_context.Update(rental);
+                    await _context.SaveChangesAsync();*/
+                    await _rentalService.UpdateRental(id, rental);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

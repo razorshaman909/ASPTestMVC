@@ -128,5 +128,29 @@ namespace MvcMovie.Services
                 RentEnd = rental.RentEnd,
             });
         }
+
+        public async Task<int> UpdateRental(int? id, Rental rental)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("UPDATE dbo.[Rentals]");
+            sb.AppendLine("SET");
+            sb.AppendLine("UserID=@UserID,");
+            sb.AppendLine("MovieId=@MovieId,");
+            sb.AppendLine("RentStart=@RentStart,");
+            sb.AppendLine("RentEnd=@RentEnd");
+            sb.AppendLine("WHERE");
+            sb.AppendLine("RentalId=@RentId");
+
+            string query = sb.ToString();
+
+            return await _connection.ExecuteAsync(query, new
+            {
+                UserID = rental.UserID,
+                MovieId = rental.MovieId,
+                RentStart = rental.RentStart,
+                RentEnd = rental.RentEnd,
+                Rentid = id
+            });
+        }
     }
 }
