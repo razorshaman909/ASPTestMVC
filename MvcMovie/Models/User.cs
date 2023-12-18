@@ -1,4 +1,6 @@
-﻿namespace MvcMovie.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MvcMovie.Models
 {
     public class User
     {

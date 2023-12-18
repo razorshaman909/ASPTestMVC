@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,32 +8,40 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
 using MvcMovie.Models;
+using MvcMovie.Services;
 
 namespace MvcMovie.Controllers
 {
     public class UsersController : Controller
     {
         private readonly MvcMovieContext _context;
+        private readonly UserService _userService;
 
-        public UsersController(MvcMovieContext context)
+        public UsersController(
+            MvcMovieContext context,
+            UserService userService
+            )
         {
             _context = context;
+            _userService = userService;
         }
 
         // GET: Users
         public async Task<IActionResult> Index()
         {
 
-            var users = _context.Users.Include(u => u.Rentals).ToList();
+            /*var users = _context.Users.Include(u => u.Rentals).ToList();*/
+            var users = await _userService.GetUsers();
 
             foreach (var user in users)
             {
                 user.RentalStatus = GetRentalStatus(user.Rentals);
-                /*System.Diagnostics.Debug.WriteLine(users);*/
             }
 
             return View(users);
         }
+
+
 
         private string GetRentalStatus(ICollection<Rental> rentals)
         {
@@ -45,6 +54,18 @@ namespace MvcMovie.Controllers
 
             return hasOverdueRental ? "Overdue" : "Renting";
         }
+
+        /*private string GetRentalStatus()
+        {
+            if (rentals == null || rentals.Count == 0)
+            {
+                return "No rental";
+            }
+
+            var hasOverdueRental = rentals.Any(r => r.RentEnd < DateTime.Now);
+
+            return hasOverdueRental ? "Overdue" : "Renting";
+        }*/
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)

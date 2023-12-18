@@ -25,6 +25,7 @@ builder.Services.AddTransient<IDbConnection>(c => new SqlConnection(builder.Conf
 
 //add custom services
 builder.Services.AddScoped<RentalService>();
+builder.Services.AddScoped<UserService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
