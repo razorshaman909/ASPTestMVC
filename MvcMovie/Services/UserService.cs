@@ -2,6 +2,7 @@
 using System.Data;
 using Dapper;
 using System.Text;
+using System.Collections.Generic;
 
 namespace MvcMovie.Services
 {
@@ -34,15 +35,42 @@ namespace MvcMovie.Services
 
             string query = sb.ToString();
 
-            return await _connection.QueryAsync<Rental, User, User>(
+            IEnumerable<Rental> rentalData = await _connection.QueryAsync<Rental, User, Rental>(
                 query,
                 (rental, user) =>
                 {
+                    user.UserID = rental.UserID;
                     rental.User = user;
 
-                    return user;
+                    return rental;
                 }
             );
+
+            List<User> userList = new List<User>();
+
+            foreach (Rental rental in rentalData) {
+                User user = userList.FirstOrDefault(u => u.UserID == rental.UserID);
+
+                if (user != null && user.UserID > 0)
+                {
+                    user.Rentals.Add(rental);
+                }
+                else
+                {
+                    User newUser = new User()
+                    {
+                        UserID = rental.User.UserID,
+                        LastName = rental.User.LastName,
+                        FirstMidName = rental.User.FirstMidName,
+                        JoinDate = rental.User.JoinDate,
+                        RentalStatus = rental.User.RentalStatus,
+                        Rentals = new List<Rental>() { rental }
+                    };
+                    userList.Add(newUser);
+                }
+            }
+
+            return userList;
         }
     }
 }
