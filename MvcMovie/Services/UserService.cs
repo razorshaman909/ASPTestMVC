@@ -17,7 +17,7 @@ namespace MvcMovie.Services
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            StringBuilder sb = new StringBuilder();
+            /*StringBuilder sb = new StringBuilder();
             sb.AppendLine("SELECT");
             sb.AppendLine("[u].UserID");
             sb.AppendLine(",[u].LastName");
@@ -34,9 +34,9 @@ namespace MvcMovie.Services
             sb.AppendLine("LEFT JOIN dbo.[Rentals] AS [r] ON [u].UserID = [r].UserID");
 
             string query = sb.ToString();
-          
+
             var userMap = new Dictionary<int, User>();
-            await _connection.QueryAsync<User, Rental, User>(  
+            await _connection.QueryAsync<User, Rental, User>(
                 query,
                 (user, rental) =>
                 {
@@ -56,15 +56,29 @@ namespace MvcMovie.Services
                     return user;
                 }
             );
-            return userMap.Values.ToList();
-         }
-    }
-}
+            return userMap.Values.ToList();*/
 
-/*  
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("SELECT");
+            sb.AppendLine("[r].RentalID");
+            sb.AppendLine(",[r].UserID");
+            sb.AppendLine(",[r].MovieId");
+            sb.AppendLine(",[r].RentStart");
+            sb.AppendLine(",[r].RentEnd");
+            //rentals
+            sb.AppendLine(",[u].UserID As Id"); // put "Id" as alias for dapper to know this is the splitting point
+            sb.AppendLine(",[u].LastName");
+            sb.AppendLine(",[u].FirstMidName");
+            sb.AppendLine(",[u].JoinDate");
+            sb.AppendLine(",[u].RentalStatus");
+            sb.AppendLine("FROM dbo.[Rentals] AS [r]");
+            sb.AppendLine("INNER JOIN dbo.[User] AS [u] ON [r].UserID = [u].UserID");
+
+            string query = sb.ToString();
+
             IEnumerable<Rental> rentalData = await _connection.QueryAsync<Rental, User, Rental>(
                 query,
-                (user, rental) =>
+                (rental, user) =>
                 {
                     user.UserID = rental.UserID;
                     rental.User = user;
@@ -75,7 +89,8 @@ namespace MvcMovie.Services
 
             List<User> userList = new List<User>();
 
-            foreach (Rental rental in rentalData) {
+            foreach (Rental rental in rentalData)
+            {
                 User user = userList.FirstOrDefault(u => u.UserID == rental.UserID);
 
                 if (user != null && user.UserID > 0)
@@ -98,9 +113,6 @@ namespace MvcMovie.Services
             }
 
             return userList;
-                  }
+        }
     }
 }
-*/
-
-
