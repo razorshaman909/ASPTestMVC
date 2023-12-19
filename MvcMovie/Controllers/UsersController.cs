@@ -35,7 +35,7 @@ namespace MvcMovie.Controllers
 
             foreach (var user in users)
             {
-                user.RentalStatus = GetRentalStatus(user.UserID, user.RentalStatus, user.Rentals) ;
+                user.RentalStatus = GetRentalStatus(user.Rentals) ;
             }
 
             return View(users);
@@ -43,7 +43,7 @@ namespace MvcMovie.Controllers
 
 
 
-        private string GetRentalStatus(int? id, string? rentstat, ICollection<Rental> rentals)
+        private string GetRentalStatus(ICollection<Rental> rentals)
         {
             
             if (rentals == null || rentals.Count == 0)
@@ -76,14 +76,22 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var users = await _userService.GetUsers(id);
+            /*var users = await _context.Users
+                .FirstOrDefaultAsync(m => m.UserID == id);*/
+            if (users == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            foreach (var user in users)
+            {
+                user.RentalStatus = (user.Rentals == null || user.Rentals.Count == 0)
+                    ? "No Rental"
+                    : user.Rentals.Any(r => r.RentEnd < DateTime.Now) ? "Overdue" : "Renting";
+            }
+
+            return View(users);
         }
 
         // GET: Users/Create
@@ -101,8 +109,9 @@ namespace MvcMovie.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
+                /*_context.Add(user);
+                await _context.SaveChangesAsync();*/
+                await _userService.AddUser(user);
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
@@ -140,8 +149,9 @@ namespace MvcMovie.Controllers
             {
                 try
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    /*_context.Update(user);
+                    await _context.SaveChangesAsync();*/
+                    await _userService.UpdateUser(id, user);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -167,14 +177,15 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            /*var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.UserID == id);*/
+            var users = await _userService.GetUsers(id);
+            if (users == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(users);
         }
 
         // POST: Users/Delete/5
@@ -182,13 +193,14 @@ namespace MvcMovie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            /*var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
                 _context.Users.Remove(user);
             }
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();*/
+            await _userService.DeleteUser(id);
             return RedirectToAction(nameof(Index));
         }
 
