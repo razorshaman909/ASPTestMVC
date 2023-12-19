@@ -17,7 +17,7 @@ namespace MvcMovie.Services
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            /*StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.AppendLine("SELECT");
             sb.AppendLine("[u].UserID");
             sb.AppendLine(",[u].LastName");
@@ -40,7 +40,10 @@ namespace MvcMovie.Services
                 query,
                 (user, rental) =>
                 {
-                    rental.UserID = user.UserID;
+                    if (rental.UserID != null)
+                    {
+                        rental.UserID = user.UserID;
+                    }
 
                     if (userMap.TryGetValue(user.UserID, out User existingUser))
                     {
@@ -52,13 +55,17 @@ namespace MvcMovie.Services
                         userMap.Add(user.UserID, user);
                     }
 
-                    user.Rentals.Add(rental);
+                    if (rental.UserID == user.UserID)
+                    {
+                        user.Rentals.Add(rental);
+                    }
+                        
                     return user;
                 }
             );
-            return userMap.Values.ToList();*/
+            return userMap.Values.ToList();
 
-            StringBuilder sb = new StringBuilder();
+            /*StringBuilder sb = new StringBuilder();
             sb.AppendLine("SELECT");
             sb.AppendLine("[r].RentalID");
             sb.AppendLine(",[r].UserID");
@@ -72,7 +79,7 @@ namespace MvcMovie.Services
             sb.AppendLine(",[u].JoinDate");
             sb.AppendLine(",[u].RentalStatus");
             sb.AppendLine("FROM dbo.[Rentals] AS [r]");
-            sb.AppendLine("INNER JOIN dbo.[User] AS [u] ON [r].UserID = [u].UserID");
+            sb.AppendLine("RIGHT JOIN dbo.[User] AS [u] ON [r].UserID = [u].UserID");
 
             string query = sb.ToString();
 
@@ -112,7 +119,7 @@ namespace MvcMovie.Services
                 }
             }
 
-            return userList;
+            return userList;*/
         }
     }
 }

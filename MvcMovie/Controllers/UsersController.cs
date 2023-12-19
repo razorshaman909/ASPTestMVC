@@ -35,7 +35,7 @@ namespace MvcMovie.Controllers
 
             foreach (var user in users)
             {
-                user.RentalStatus = GetRentalStatus(user.Rentals);
+                user.RentalStatus = GetRentalStatus(user.UserID, user.RentalStatus, user.Rentals) ;
             }
 
             return View(users);
@@ -43,8 +43,9 @@ namespace MvcMovie.Controllers
 
 
 
-        private string GetRentalStatus(ICollection<Rental> rentals)
+        private string GetRentalStatus(int? id, string? rentstat, ICollection<Rental> rentals)
         {
+            
             if (rentals == null || rentals.Count == 0)
             {
                 return "No rental";
@@ -55,7 +56,7 @@ namespace MvcMovie.Controllers
             return hasOverdueRental ? "Overdue" : "Renting";
         }
 
-        /*private string GetRentalStatus()
+        /*private string GetRentalStatus(ICollection<Rental> rentals)
         {
             if (rentals == null || rentals.Count == 0)
             {
